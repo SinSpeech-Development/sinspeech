@@ -1,3 +1,5 @@
+<UNK> SPN
+<SIL> SIL
 අ a
 අං a x
 අංක a x k @

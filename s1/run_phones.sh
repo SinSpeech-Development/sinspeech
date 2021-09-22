@@ -10,7 +10,7 @@ fi
 # log the terminal outputs
 exec >> $LOG_LOCATION/"run_phones_"$stage.log 2>&1
 
-nj=2
+nj=$(nproc)
 
 . ./cmd.sh
 . ./path.sh

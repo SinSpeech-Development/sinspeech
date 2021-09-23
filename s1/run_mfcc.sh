@@ -8,7 +8,7 @@ if [ ! -d "$LOG_LOCATION" ]; then
 fi
 
 # log the terminal outputs
-exec >> $LOG_LOCATION/"run_lang_"$stage.log 2>&1
+exec >> $LOG_LOCATION/"run_mfcc_"$stage.log 2>&1
 
 nj=$(nproc)
 

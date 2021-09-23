@@ -1,5 +1,3 @@
-<UNK> SPN
-<SIL> SIL
 අ a
 අං a x
 අංක a x k @
@@ -22340,7 +22338,6 @@
 නොහේ n o h e:
 නොහොත් n o h o t^
 නොහොබිනා n o h o b i n a:
-නොෟකාවට n i^ k a: w @ t @
 නෝ n o:
 නෝක්කාඩු n o: k k a: d u
 නෝට්ටු n o: t t u
@@ -28585,7 +28582,6 @@
 බෙහෙවින්ම b e h e w i n m @
 බෙහෝ b e h o:
 බෙළෙක්කෙ b e l e k k e
-බෙෳද්ධ b i^ : d^ d^ @
 බේකන් b e: k a n
 බේගලය b e: g @ l @ y @
 බේට්ස් b e: t s
@@ -30334,7 +30330,6 @@
 මාතෘත්වයෙන් m a: t^ r u t^ w @ y e n
 මාතෘභූමියේ m a: t^ r u b u: m i y e:
 මාතොට m a: t^ o t @
-මාතෟකාවක් m a: t^ i^ k a: w a k
 මාදම්පේ m a: d^ a m p e:
 මාදිලි m a: d^ i l i
 මාදිලිය m a: d^ i l i y @
@@ -39789,7 +39784,6 @@
 සංස්කෘතියේත් s a x s k r u t^ i y e: t^
 සංස්කෘතීන් s a x s k r u t^ i: n
 සංස්කෘතීන්ට s a x s k r u t^ i: n t @
-සංස්කෟතිය s a x s k i^ t^ i y @
 සංස්ථා s a x s t^ a:
 සංස්ථාගත s a x s t^ a: g @ t^ @
 සංස්ථාව s a x s t^ a: w @
@@ -45969,9 +45963,9 @@
 අන්ඩුව a n d u w @
 අන්ඩුවෙන් a n d u w e n
 අන්ඩූකරන්න a n d u: k @ r a n n @
-අන්තඃපුර a n t^ ah p u r @
-අන්තඃපුරය a n t^ ah p u r @ y @
-අන්තඃපුරයක් a n t^ ah p u r @ y a k
+අන්තඃපුර a n t^ a h p u r @
+අන්තඃපුරය a n t^ a h p u r @ y @
+අන්තඃපුරයක් a n t^ a h p u r @ y a k
 අන්ද a n d^ @
 අන්දකාරෙ a n d^ @ k a: r e
 අන්දගත්තේ a n d^ @ g a t^ t^ e:
@@ -53844,6 +53838,7 @@
 නෞකාව n au k a: w @
 නෞකාවක් n au k a: w a k
 නෞකාවකි n au k a: w @ k i
+නෞකාවට n au k a: w @ t @
 නෞකාවේ n au k a: w e:
 පංචඉන්ද්‍රියයන්ට p a x c^ @ i n d^ d^ r i y @ y a n t @
 පංචභූතයන්ගෙන් p a x c^ @ b u: t^ @ y a n g e n
@@ -58209,7 +58204,7 @@
 යොමුකිරීමට y o m u k i r i: m @ t @
 යොමුකිරීමෙන් y o m u k i r i: m e n
 යොරිටි y o r i t i
-යොහොවඃ y o h o w ah
+යොහොවඃ y o h o w a h
 යෝග්‍යදැයි y o: g g y @ d^ ae y i
 යෝගීන්ගේ y o: g i: n g e:
 යෞවන y au w @ n @
@@ -62210,7 +62205,7 @@
 සෞම්‍යා s au m y a:
 සෞරග්‍රහ s au r a g g r a h a
 සෞවුදි s au w u d^ i
-හඃ h ah
+හඃ h a h
 හඟවන h a ng @ w @ n @
 හඟවයි h a ng @ w a y i
 හටගැන්මක් h a t @ g ae n m a k

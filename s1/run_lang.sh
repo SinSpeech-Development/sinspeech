@@ -54,8 +54,7 @@ if [ $stage -le 1 ]; then
 
     echo "===== BEGIN : PREPARE lm.arpa.gz ====="
     echo
-    ngram-count -order $lm_order -write-vocab $local/tmp/vocab-full.txt \ 
-            -wbdiscount -text $local/corpus.txt -lm $local/tmp/lm.arpa.gz
+    ngram-count -order $lm_order -write-vocab $local/tmp/vocab-full.txt -wbdiscount -text $local/corpus.txt -lm $local/tmp/lm.arpa.gz
     echo
     echo "===== END: PREPARE lm.arpa.gz ====="
 

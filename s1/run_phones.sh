@@ -140,6 +140,7 @@ if [ $stage -le 8 ]; then
     echo "===== END: lmrescore_const_arpa ====="
 fi
 
+
 if [ $stage -le 9 ]; then
     echo "===== BEGIN : DNN training ====="
     echo

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-stage=0
+stage=9
 LOG_LOCATION=`pwd`/../logs
 
 if [ ! -d "$LOG_LOCATION" ]; then
@@ -27,19 +27,19 @@ if [ $stage -le 0 ]; then
 fi
 
 # train a monophone system
-if [ $stage -le 1 ]; 
+if [ $stage -le 1 ]; then
     echo "===== BEGIN : Train 500 Short Mono ====="
     echo
     # TODO(galv): Is this too many jobs for a smaller dataset?
     steps/train_mono.sh --boost-silence 1.25 --nj $nj --cmd "$train_cmd" \
-        data/train_500short data/lang exp/mono
+        data/train data/lang exp/mono
     echo
     echo "===== END: Train 500 Short Mono ====="
 
     echo "===== BEGIN : mono align ====="
     echo
     steps/align_si.sh --boost-silence 1.25 --nj $nj --cmd "$train_cmd" \
-        data/train_clean_5 data/lang exp/mono exp/mono_ali_train
+        data/train data/lang exp/mono exp/mono_ali_train
     echo
     echo "===== END: mono align ====="
 fi
@@ -138,6 +138,15 @@ if [ $stage -le 8 ]; then
       data/test exp/tri3b/decode_test
     echo
     echo "===== END: lmrescore_const_arpa ====="
+fi
+
+if [ $stage -le 9 ]; then
+    echo "===== BEGIN : DNN training ====="
+    echo
+      local/chain2/run_tdnn_copy.sh
+
+    echo
+    echo "===== END: DNN training ====="
 fi
 
 exit 0

@@ -25,10 +25,10 @@ set -euo pipefail
 
 # First the options that are passed through to run_ivector_common.sh
 # (some of which are also used in this script directly).
-stage=22
-decode_nj=4
-train_set=train_clean_5
-test_sets=dev_clean_2
+stage=0
+decode_nj=$(nproc)
+train_set=train
+test_sets=test
 gmm=tri3b
 nnet3_affix=
 
@@ -76,13 +76,13 @@ echo "$0 $@"  # Print the command line for logging
 . ./path.sh
 . ./utils/parse_options.sh
 
-if ! cuda-compiled; then
-  cat <<EOF && exit 1
-This script is intended to be used with GPUs but you have not compiled Kaldi with CUDA
-If you want to use GPUs (and have them), go to src/, and configure and make on a machine
-where "nvcc" is installed.
-EOF
-fi
+# if ! cuda-compiled; then
+#   cat <<EOF && exit 1
+# This script is intended to be used with GPUs but you have not compiled Kaldi with CUDA
+# If you want to use GPUs (and have them), go to src/, and configure and make on a machine
+# where "nvcc" is installed.
+# EOF
+# fi
 
 # The iVector-extraction and feature-dumping parts are the same as the standard
 # nnet3 setup, and you can skip them by setting "--stage 11" if you have already
@@ -92,7 +92,7 @@ fi
 #                                   --gmm $gmm \
 #                                   --nnet3-affix "$nnet3_affix" || exit 1;
 
-local/nnet3/run_ivector_common.sh --stage 11 \
+local/nnet3/run_ivector_common.sh --stage $stage \
                                   --train-set $train_set \
                                   --gmm $gmm \
                                   --nnet3-affix "$nnet3_affix" || exit 1;
@@ -326,7 +326,7 @@ if [ $stage -le 21 ]; then
     $train_cmd $dir/log/init_mdl.log \
         nnet3-am-init ${dir}/init/default_trans.mdl $dir/init/default.raw $dir/init/default.mdl || exit 1
 fi
-
+exit 0;
 if [ $stage -le 22 ]; then
   echo "$0: about to train model"
   steps/chain2/train.sh \
@@ -342,14 +342,14 @@ if [ $stage -le 23 ]; then
   # Note: it's not important to give mkgraph.sh the lang directory with the
   # matched topology (since it gets the topology file from the model).
   utils/mkgraph.sh \
-    --self-loop-scale 1.0 data/lang_test_tgsmall \
-    $tree_dir $tree_dir/graph_tgsmall || exit 1;
+    --self-loop-scale 1.0 data/lang \
+    $tree_dir $tree_dir/graph || exit 1;
 fi
 
 if [ $stage -le 24 ]; then
   frames_per_chunk=$(echo $chunk_width | cut -d, -f1)
   # Do the speaker-dependent decoding pass
-  test_sets=dev_clean_2
+  test_sets=test
   for data in $test_sets; do
     (
       nspk=$(wc -l <data/${data}_hires/spk2utt)
@@ -362,10 +362,10 @@ if [ $stage -le 24 ]; then
           --frames-per-chunk $frames_per_chunk \
           --nj $nspk --cmd "$decode_cmd"  --num-threads 4 \
           --online-ivector-dir exp/nnet3${nnet3_affix}/ivectors_${data}_hires \
-          $tree_dir/graph_tgsmall data/${data}_hires ${dir}/decode_tgsmall_${data} || exit 1
+          $tree_dir/graph data/${data}_hires ${dir}/decode_${data} || exit 1
       steps/lmrescore_const_arpa.sh --cmd "$decode_cmd" \
-        data/lang_test_{tgsmall} \
-       data/${data}_hires ${dir}/decode_{tgsmall}_${data} || exit 1
+        data/lang \
+       data/${data}_hires ${dir}/decode_${data} || exit 1
     ) || touch $dir/.error &
   done
   wait

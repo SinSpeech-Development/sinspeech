@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-stage=0
+stage=9
 LOG_LOCATION=`pwd`/../logs
 
 if [ ! -d "$LOG_LOCATION" ]; then
@@ -138,6 +138,16 @@ if [ $stage -le 8 ]; then
       data/test exp/tri3b/decode_test
     echo
     echo "===== END: lmrescore_const_arpa ====="
+fi
+
+
+if [ $stage -le 9 ]; then
+    echo "===== BEGIN : DNN training ====="
+    echo
+      local/chain2/run_tdnn_copy.sh
+
+    echo
+    echo "===== END: DNN training ====="
 fi
 
 exit 0

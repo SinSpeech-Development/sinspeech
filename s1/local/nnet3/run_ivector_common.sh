@@ -9,8 +9,8 @@ set -euo pipefail
 # of usage.
 
 stage=0
-train_set=train_clean_5
-test_sets="dev_clean_2"
+train_set=train
+test_sets=test
 gmm=tri3b
 
 online_cmvn_iextractor=false
@@ -53,9 +53,6 @@ if [ $stage -le 3 ]; then
   # this shows how you can split across multiple file-systems.
   echo "$0: creating high-resolution MFCC features"
   mfccdir=data/${train_set}_sp_hires/data
-  if [[ $(hostname -f) == *.clsp.jhu.edu ]] && [ ! -d $mfccdir/storage ]; then
-    utils/create_split_dir.pl /export/fs0{1,2}/$USER/kaldi-data/mfcc/mini_librispeech-$(date +'%m_%d_%H_%M')/s5/$mfccdir/storage $mfccdir/storage
-  fi
 
   for datadir in ${train_set}_sp ${test_sets}; do
     utils/copy_data_dir.sh data/$datadir data/${datadir}_hires
@@ -125,9 +122,6 @@ if [ $stage -le 6 ]; then
   # valid for the non-'max2' data, the utterance list is the same.
 
   ivectordir=exp/nnet3${nnet3_affix}/ivectors_${train_set}_sp_hires
-  if [[ $(hostname -f) == *.clsp.jhu.edu ]] && [ ! -d $ivectordir/storage ]; then
-    utils/create_split_dir.pl /export/fs0{1,2}/$USER/kaldi-data/ivectors/mini_librispeech-$(date +'%m_%d_%H_%M')/s5/$ivectordir/storage $ivectordir/storage
-  fi
 
 
   # having a larger number of speakers is helpful for generalization, and to

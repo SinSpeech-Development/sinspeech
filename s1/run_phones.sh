@@ -27,19 +27,19 @@ if [ $stage -le 0 ]; then
 fi
 
 # train a monophone system
-if [ $stage -le 1 ]; 
+if [ $stage -le 1 ]; then
     echo "===== BEGIN : Train 500 Short Mono ====="
     echo
     # TODO(galv): Is this too many jobs for a smaller dataset?
     steps/train_mono.sh --boost-silence 1.25 --nj $nj --cmd "$train_cmd" \
-        data/train_500short data/lang exp/mono
+        data/train data/lang exp/mono
     echo
     echo "===== END: Train 500 Short Mono ====="
 
     echo "===== BEGIN : mono align ====="
     echo
     steps/align_si.sh --boost-silence 1.25 --nj $nj --cmd "$train_cmd" \
-        data/train_clean_5 data/lang exp/mono exp/mono_ali_train
+        data/train data/lang exp/mono exp/mono_ali_train
     echo
     echo "===== END: mono align ====="
 fi

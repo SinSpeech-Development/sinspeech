@@ -16,7 +16,7 @@
 # export cuda_cmd="queue.pl --gpu 1"
 
 
-export train_cmd="run.pl --mem 8G"
-export decode_cmd="run.pl --mem 8G"
-export mkgraph_cmd="run.pl --mem 8G"
-# export cuda_cmd="run.pl --gpu 1 --use-gpu=wait"
+export train_cmd="run.pl --mem 6G"
+export decode_cmd="run.pl --mem 4G"
+export mkgraph_cmd="run.pl --mem 4G"
+export cuda_cmd="run.pl --gpu 1 --use-gpu=wait"

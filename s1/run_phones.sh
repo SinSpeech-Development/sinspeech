@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-stage=9
+stage=22
 LOG_LOCATION=`pwd`/../logs
 
 if [ ! -d "$LOG_LOCATION" ]; then
@@ -141,10 +141,10 @@ if [ $stage -le 8 ]; then
 fi
 
 
-if [ $stage -le 9 ]; then
+if [ $stage -le 22 ]; then
     echo "===== BEGIN : DNN training ====="
     echo
-      local/chain2/run_tdnn_copy.sh
+      local/chain2/run_tdnn_copy.sh --stage $stage
 
     echo
     echo "===== END: DNN training ====="

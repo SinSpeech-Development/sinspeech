@@ -76,13 +76,13 @@ echo "$0 $@"  # Print the command line for logging
 . ./path.sh
 . ./utils/parse_options.sh
 
-# if ! cuda-compiled; then
-#   cat <<EOF && exit 1
-# This script is intended to be used with GPUs but you have not compiled Kaldi with CUDA
-# If you want to use GPUs (and have them), go to src/, and configure and make on a machine
-# where "nvcc" is installed.
-# EOF
-# fi
+if ! cuda-compiled; then
+  cat <<EOF && exit 1
+This script is intended to be used with GPUs but you have not compiled Kaldi with CUDA
+If you want to use GPUs (and have them), go to src/, and configure and make on a machine
+where "nvcc" is installed.
+EOF
+fi
 
 # The iVector-extraction and feature-dumping parts are the same as the standard
 # nnet3 setup, and you can skip them by setting "--stage 11" if you have already
@@ -344,7 +344,8 @@ if [ $stage -le 21 ]; then
     $train_cmd $dir/log/init_mdl.log \
         nnet3-am-init ${dir}/init/default_trans.mdl $dir/init/default.raw $dir/init/default.mdl || exit 1
 fi
-exit 0;
+
+
 if [ $stage -le 22 ]; then
   echo "$0: about to train model"
   steps/chain2/train.sh \

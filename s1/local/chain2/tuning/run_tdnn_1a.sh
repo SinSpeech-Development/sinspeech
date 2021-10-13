@@ -99,14 +99,32 @@ local/nnet3/run_ivector_common.sh --stage $stage \
 
 # Problem: We have removed the "train_" prefix of our training set in
 # the alignment directory names! Bad!
+
+# directory contains the final hmm model
 gmm_dir=exp/$gmm
+
+# directory contains the training alignments of speed perturbed data
 ali_dir=exp/${gmm}_ali_${train_set}_sp
+
+# does not exist yet, directory to put the new decision tree
 tree_dir=exp/chain2${nnet3_affix}/tree_sp${tree_affix:+_$tree_affix}
+
+# does not exist yet, new lang directory with the new topology
 lang=data/lang_chain
+
+# does not exist yet, directory to put lattices
 lat_dir=exp/chain2${nnet3_affix}/${gmm}_${train_set}_sp_lats
+
+# does not exist yet, directory to put #TODO
 dir=exp/chain2${nnet3_affix}/tdnn${affix}_sp
+
+# directory of training set, which are the high-resolution MFCCs
 train_data_dir=data/${train_set}_sp_hires
+
+# directory of training set, which are the low-resolution MFCCs
 lores_train_data_dir=data/${train_set}_sp
+
+# directory contains i-vectors
 train_ivector_dir=exp/nnet3${nnet3_affix}/ivectors_${train_set}_sp_hires
 
 for f in $gmm_dir/final.mdl $train_data_dir/feats.scp $train_ivector_dir/ivector_online.scp \

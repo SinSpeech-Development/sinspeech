@@ -1,9 +1,9 @@
 /logs
 
-/s1/src
-/s1/steps
-/s1/utils
-
-/s1/data
-/s1/exp
-/s1/mfcc
+/**/src
+/**/steps
+/**/utils
+/**/data
+/**/exp
+/**/mfcc
+/**/logs

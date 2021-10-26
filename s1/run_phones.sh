@@ -32,7 +32,7 @@ if [ $stage -le 1 ]; then
     echo
     # TODO(galv): Is this too many jobs for a smaller dataset?
     steps/train_mono.sh --boost-silence 1.25 --nj $nj --cmd "$train_cmd" \
-        data/train data/lang exp/mono
+        data/train_500short data/lang exp/mono
     echo
     echo "===== END: Train 500 Short Mono ====="
 

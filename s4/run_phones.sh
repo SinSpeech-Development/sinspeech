@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-stage=17
+start=$(date +%s.%N)
+
+stage=0
 LOG_LOCATION=`pwd`/logs
 
 if [ ! -d "$LOG_LOCATION" ]; then
@@ -20,21 +22,21 @@ set -euo pipefail
 
 if [ $stage -le 0 ]; then
 
-  # Get the shortest 500 utterances first because those are more likely
+  # Get the shortest 5000 utterances first because those are more likely
   # to have accurate alignments.
-  utils/subset_data_dir.sh --shortest data/train 500 data/train_500short
+  utils/subset_data_dir.sh --shortest data/train 5000 data/train_5000short
 
 fi
 
 # train a monophone system
 if [ $stage -le 1 ]; then
-    echo "===== BEGIN : Train 500 Short Mono ====="
+    echo "===== BEGIN : Train 5000 Short Mono ====="
     echo
     # TODO(galv): Is this too many jobs for a smaller dataset?
     steps/train_mono.sh --boost-silence 1.25 --nj $nj --cmd "$train_cmd" \
-        data/train_500short data/lang exp/mono
+        data/train_5000short data/lang exp/mono
     echo
-    echo "===== END: Train 500 Short Mono ====="
+    echo "===== END: Train 5000 Short Mono ====="
 
     echo "===== BEGIN : mono align ====="
     echo
@@ -101,53 +103,106 @@ fi
 if [ $stage -le 5 ]; then
     # Test the tri3b system with the silprobs and pron-probs.
 
+    # decode using the mono model
+    echo "===== BEGIN : make mono graph ====="
+    echo
+    utils/mkgraph.sh data/lang \
+                   exp/mono exp/mono/graph
+    echo
+    echo "===== END: make mono graph ====="
+
+    # decode using the tri1 model
+    echo "===== BEGIN : make tri1 graph ====="
+    echo
+    utils/mkgraph.sh data/lang \
+                   exp/tri1 exp/tri1/graph
+    echo
+    echo "===== END: make tri1 graph ====="
+
+    # decode using the tri2b model
+    echo "===== BEGIN : make tri2b graph ====="
+    echo
+    utils/mkgraph.sh data/lang \
+                   exp/tri2b exp/tri2b/graph
+    echo
+    echo "===== END: make tri2b graph ====="
+
     # decode using the tri3b model
-    echo "===== BEGIN : make graph ====="
+    echo "===== BEGIN : make tri3b graph ====="
     echo
     utils/mkgraph.sh data/lang \
                    exp/tri3b exp/tri3b/graph
     echo
-    echo "===== END: make graph ====="
+    echo "===== END: make tri3b graph ====="
 fi
 
 if [ $stage -le 6 ]; then
 
-    echo "===== BEGIN : fmllr decode ====="
+    echo "===== BEGIN : mono decode ====="
+    echo
+    steps/decode.sh --nj $nj --cmd "$decode_cmd" \
+                          exp/mono/graph data/test \
+                          exp/mono/decode_test
+    echo
+    echo "===== END: mono decode ====="
+
+    echo "===== BEGIN : tri1 decode ====="
+    echo
+    steps/decode.sh --nj $nj --cmd "$decode_cmd" \
+                          exp/tri1/graph data/test \
+                          exp/tri1/decode_test
+    echo
+    echo "===== END: tri1 decode ====="
+
+    echo "===== BEGIN : tri2b decode ====="
+    echo
+    steps/decode.sh --nj $nj --cmd "$decode_cmd" \
+                          exp/tri2b/graph data/test \
+                          exp/tri2b/decode_test
+    echo
+    echo "===== END: tri2b decode ====="
+
+    echo "===== BEGIN : tri3b fmllr decode ====="
     echo
     steps/decode_fmllr.sh --nj $nj --cmd "$decode_cmd" \
                           exp/tri3b/graph data/test \
                           exp/tri3b/decode_test
     echo
-    echo "===== END: fmllr decode ====="
+    echo "===== END: tri3b fmllr decode ====="
 fi
 
-if [ $stage -le 7 ]; then
-    echo "===== BEGIN : lmrescore ====="
-    echo
-    steps/lmrescore.sh --cmd "$decode_cmd" data/lang \
-                       data/test exp/tri3b/decode_test
-    echo
-    echo "===== END: lmrescore ====="
-fi
+# if [ $stage -le 7 ]; then
+#     echo "===== BEGIN : lmrescore ====="
+#     echo
+#     steps/lmrescore.sh --cmd "$decode_cmd" data/lang \
+#                        data/test exp/tri3b/decode_test
+#     echo
+#     echo "===== END: lmrescore ====="
+# fi
 
-if [ $stage -le 8 ]; then
-    echo "===== BEGIN : lmrescore_const_arpa ====="
-    echo
-    steps/lmrescore_const_arpa.sh \
-      --cmd "$decode_cmd" data/lang \
-      data/test exp/tri3b/decode_test
-    echo
-    echo "===== END: lmrescore_const_arpa ====="
-fi
+# if [ $stage -le 8 ]; then
+#     echo "===== BEGIN : lmrescore_const_arpa ====="
+#     echo
+#     steps/lmrescore_const_arpa.sh \
+#       --cmd "$decode_cmd" data/lang \
+#       data/test exp/tri3b/decode_test
+#     echo
+#     echo "===== END: lmrescore_const_arpa ====="
+# fi
 
 
-if [ $stage -le 17 ]; then
-    echo "===== BEGIN : DNN training ====="
-    echo
-      local/chain/run_tdnn_copy.sh
+# if [ $stage -le 22 ]; then
+#     echo "===== BEGIN : DNN training ====="
+#     echo
+#       local/chain2/run_tdnn_copy.sh --stage $stage
 
-    echo
-    echo "===== END: DNN training ====="
-fi
+#     echo
+#     echo "===== END: DNN training ====="
+# fi
+
+end=$(date +%s.%N)    
+runtime=$(python -c "print(${end} - ${start})")
+
+echo "Runtime was $runtime"
 
 exit 0

@@ -3,7 +3,7 @@ set -euo pipefail
 
 
 # configs for 'chain'
-stage=17
+stage=15
 decode_nj=$(nproc)
 train_set=train
 gmm=tri3b
@@ -161,9 +161,9 @@ if [ $stage -le 15 ]; then
     --egs.chunk-width $frames_per_eg \
     --trainer.dropout-schedule $dropout_schedule \
     --trainer.add-option="--optimization.memory-compression-level=2" \
-    --trainer.num-chunk-per-minibatch 32 \
+    --trainer.num-chunk-per-minibatch 64 \
     --trainer.frames-per-iter 2500000 \
-    --trainer.num-epochs 1 \
+    --trainer.num-epochs 2 \
     --trainer.optimization.num-jobs-initial 1 \
     --trainer.optimization.num-jobs-final 1 \
     --trainer.optimization.initial-effective-lrate 0.00015 \
@@ -174,7 +174,7 @@ if [ $stage -le 15 ]; then
     --tree-dir $tree_dir \
     --lat-dir $lat_dir \
     --dir $dir  || exit 1;
-  echo "training finished"
+
 fi
 
 if [ $stage -le 16 ]; then
@@ -186,11 +186,11 @@ fi
 
 
 if [ $stage -le 17 ]; then
-  echo "decoding started"
-  frames_per_chunk=$(echo $frames_per_eg | cut -d, -f1)
   rm $dir/.error 2>/dev/null || true
   for data in test; do
       (
+      steps/nnet3/decode.sh \
+          $graph_dir data/${decode_set}_hires $dir/decode_${decode_set} || exit 1
     steps/nnet3/decode.sh \
           --acwt 1.0 --post-decode-acwt 10.0 \
           --frames-per-chunk $frames_per_chunk \
@@ -212,11 +212,9 @@ if [ $stage -le 17 ]; then
     echo "$0: something went wrong in decoding"
     exit 1
   fi
-  echo "decoding finished"
 fi
 
 if $test_online_decoding && [ $stage -le 18 ]; then
-  echo "online decoding started"
   # note: if the features change (e.g. you add pitch features), you will have to
   # change the options of the following command line.
   steps/online/nnet3/prepare_online_decoding.sh \
@@ -224,15 +222,15 @@ if $test_online_decoding && [ $stage -le 18 ]; then
        $lang exp/nnet3${nnet3_affix}/extractor $dir ${dir}_online
 
   rm $dir/.error 2>/dev/null || true
-  for data in test; do
+  for data in test_clean test_other dev_clean dev_other; do
     (
       nspk=$(wc -l <data/${data}_hires/spk2utt)
       # note: we just give it "data/${data}" as it only uses the wav.scp, the
       # feature type does not matter.
       steps/online/nnet3/decode.sh \
           --acwt 1.0 --post-decode-acwt 10.0 \
-          --nj 4 --cmd "$decode_cmd" \
-          $graph_dir data/${data} ${dir}_online/decode_${data} || exit 1
+          --nj $nspk --cmd "$decode_cmd" \
+          $graph_dir data/${data} ${dir}_online/decode_${data}_tgsmall || exit 1
 
     ) || touch $dir/.error &
   done
@@ -241,7 +239,6 @@ if $test_online_decoding && [ $stage -le 18 ]; then
     echo "$0: something went wrong in decoding"
     exit 1
   fi
-  echo "online decoding finished"
 fi
 
 

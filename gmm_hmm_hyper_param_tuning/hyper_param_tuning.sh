@@ -5,7 +5,7 @@ start=$(date +%s.%N)
 stage=0
 LOG_LOCATION=`pwd`/logs
 
-model='mono'
+model="mono"
 
 # hyper param for mono
 hp_mono_totgauss=1000
@@ -33,20 +33,20 @@ fi
 # log the terminal outputs
 exec >> $LOG_LOCATION/"hyper_param_tuning_"$model.log 2>&1
 
-if [ $model -eq 'mono' ]; then
+if [ "$model" = "mono" ]; then
     echo "=== Hyper params for Mono Model ==="
     echo "totgauss: "$hp_mono_totgauss
     echo
 fi
 
-if [ $model -eq 'tri1' ]; then
+if [ "$model" = "tri1" ]; then
     echo "=== Hyper params for Tri1 Model ==="
     echo "number of leaves: "$hp_tri1_numleaves
     echo "totgauss: "$hp_tri1_totgauss
     echo
 fi
 
-if [ $model -eq 'tri2' ]; then
+if [ "$model" = "tri2" ]; then
     echo "=== Hyper params for Tri2 Model ==="
     echo "left_context: "$hp_tri2_left_context
     echo "right_context: "$hp_tri2_right_context
@@ -55,7 +55,7 @@ if [ $model -eq 'tri2' ]; then
     echo 
 fi
 
-if [ $model -eq 'tri3' ]; then
+if [ "$model" = "tri3" ]; then
     echo "=== Hyper params for Tri3 Model ==="
     echo "number of leaves: "$hp_tri3_numleaves
     echo "totgauss: "$hp_tri3_totgauss
@@ -70,7 +70,7 @@ nj=$(nproc)
 
 set -euo pipefail
 
-if [[ $stage -le 0 && $model -eq 'mono' ]]; then
+if [[ $stage -le 0 && "$model" == "mono" ]]; then
 
   # Get the shortest 5000 utterances first because those are more likely
   # to have accurate alignments.
@@ -79,7 +79,7 @@ if [[ $stage -le 0 && $model -eq 'mono' ]]; then
 fi
 
 # train a monophone system
-if [[ $stage -le 1 && $model -eq 'mono' ]]; then
+if [[ $stage -le 1 && "$model" == "mono" ]]; then
 
     echo "===== BEGIN : Train 50000 Short Mono ====="
     echo
@@ -109,7 +109,7 @@ if [[ $stage -le 1 && $model -eq 'mono' ]]; then
 fi
 
 # train a first delta + delta-delta triphone system on all utterances
-if [[ $stage -le 2 && $model -eq 'tri1' ]]; then
+if [[ $stage -le 2 && "$model" == "tri1" ]]; then
 
     echo "===== BEGIN : mono align ====="
     echo
@@ -145,7 +145,7 @@ if [[ $stage -le 2 && $model -eq 'tri1' ]]; then
 fi
 
 # train an LDA+MLLT system.
-if [[ $stage -le 3 && $model -eq 'tri2' ]]; then
+if [[ $stage -le 3 && "$model" == "tri2" ]]; then
 
     echo "===== BEGIN : tri1 align ====="
     echo
@@ -181,7 +181,7 @@ if [[ $stage -le 3 && $model -eq 'tri2' ]]; then
 fi
 
 # Train tri3b, which is LDA+MLLT+SAT
-if [[ $stage -le 4 && $model -eq 'tri3' ]]; then
+if [[ $stage -le 4 && "$model" == "tri3" ]]; then
     echo "===== BEGIN: tri2b model align ====="
     echo
     # Align utts using the tri2b model

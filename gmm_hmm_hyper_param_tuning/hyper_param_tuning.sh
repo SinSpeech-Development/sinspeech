@@ -5,7 +5,7 @@ start=$(date +%s.%N)
 stage=0
 LOG_LOCATION=`pwd`/logs
 
-model="mono"
+model=$1
 
 # hyper param for mono
 hp_mono_totgauss=1000
@@ -113,30 +113,31 @@ if [[ $stage -le 2 && "$model" == "tri1" ]]; then
 
     echo "===== BEGIN : mono align ====="
     echo
-    steps/align_si.sh --boost-silence 1.25 --nj $nj --cmd "$train_cmd" \
-        data/train data/lang exp/mono exp/mono_ali_train
+    # steps/align_si.sh --boost-silence 1.25 --nj $nj --cmd "$train_cmd" \
+        # data/train data/lang exp/mono exp/mono_ali_train
     echo
     echo "===== END: mono align ====="
     
     echo "===== BEGIN : Train delta + delta-delta triphone ====="
     echo
-    steps/train_deltas.sh --boost-silence 1.25 --cmd "$train_cmd" \
-        $hp_tri1_numleaves $hp_tri1_totgauss data/train data/lang \
-        exp/mono_ali_train exp/tri1
+    # steps/train_deltas.sh --boost-silence 1.25 --cmd "$train_cmd" \
+        # $hp_tri1_numleaves $hp_tri1_totgauss data/train data/lang \
+        # exp/mono_ali_train exp/tri1
     echo
     echo "===== END: Train delta + delta-delta triphone ====="
 
     # decode using the tri1 model
     echo "===== BEGIN : make tri1 graph ====="
     echo
-    utils/mkgraph.sh data/lang \
-                   exp/tri1 exp/tri1/graph
+    # utils/mkgraph.sh data/lang \
+                #    exp/tri1 exp/tri1/graph
     echo
     echo "===== END: make tri1 graph ====="
 
     echo "===== BEGIN : tri1 decode ====="
     echo
     steps/decode.sh --nj $nj --cmd "$decode_cmd" \
+                            --stage 2 \
                           exp/tri1/graph data/valid \
                           exp/tri1/decode_valid
     echo

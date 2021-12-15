@@ -11,14 +11,14 @@ model=$1
 hp_mono_totgauss=1000
 
 # hyper param for tri1
-hp_tri1_numleaves=$2
-hp_tri1_totgauss=$3
+hp_tri1_numleaves=2000
+hp_tri1_totgauss=10000
 
 # hyper param for tri2
-hp_tri2_left_context=3
-hp_tri2_right_context=3
-hp_tri2_numleaves=2500
-hp_tri2_totgauss=15000
+hp_tri2_left_context=$2
+hp_tri2_right_context=$3
+hp_tri2_numleaves=$4
+hp_tri2_totgauss=$5
 
 # hyper param for tri3
 hp_tri3_numleaves=2500

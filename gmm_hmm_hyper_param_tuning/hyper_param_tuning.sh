@@ -56,13 +56,6 @@ if [ "$model" = "tri3" ]; then
     echo 
 fi
 
-steps/train_lda_mllt.sh  --cmd "$train_cmd" \
-        --splice-opts $splice_opts \
-        $hp_tri2_numleaves $hp_tri2_totgauss \
-        data/train data/lang exp/tri1_ali_train exp/tri2b
-
-exit 0;
-
 
 nj=$(nproc)
 

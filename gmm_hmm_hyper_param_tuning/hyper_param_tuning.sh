@@ -15,16 +15,12 @@ hp_tri1_numleaves=2000
 hp_tri1_totgauss=10000
 
 # hyper param for tri2
-hp_tri2_left_context=$2
-hp_tri2_right_context=$3
-hp_tri2_numleaves=$4
-hp_tri2_totgauss=$5
+hp_tri2_numleaves=$2
+hp_tri2_totgauss=$3
 
 # hyper param for tri3
 hp_tri3_numleaves=2500
 hp_tri3_totgauss=15000
-
-splice_opts="--left-context=""$hp_tri2_left_context"" --right-context=""$hp_tri2_right_context"
 
 if [ ! -d "$LOG_LOCATION" ]; then
   mkdir -p $LOG_LOCATION
@@ -48,8 +44,6 @@ fi
 
 if [ "$model" = "tri2" ]; then
     echo "=== Hyper params for Tri2 Model ==="
-    echo "left_context: "$hp_tri2_left_context
-    echo "right_context: "$hp_tri2_right_context
     echo "number of leaves: "$hp_tri2_numleaves
     echo "totgauss: "$hp_tri2_totgauss
     echo 
@@ -61,6 +55,14 @@ if [ "$model" = "tri3" ]; then
     echo "totgauss: "$hp_tri3_totgauss
     echo 
 fi
+
+steps/train_lda_mllt.sh  --cmd "$train_cmd" \
+        --splice-opts $splice_opts \
+        $hp_tri2_numleaves $hp_tri2_totgauss \
+        data/train data/lang exp/tri1_ali_train exp/tri2b
+
+exit 0;
+
 
 nj=$(nproc)
 
@@ -157,7 +159,7 @@ if [[ $stage -le 3 && "$model" == "tri2" ]]; then
     echo "===== BEGIN: train LDA+MLLT - tri2b model ====="
     echo
     steps/train_lda_mllt.sh  --cmd "$train_cmd" \
-        --splice-opts $splice_opts \
+        --splice-opts "--left-context=3 --right-context=3" \
         $hp_tri2_numleaves $hp_tri2_totgauss \
         data/train data/lang exp/tri1_ali_train exp/tri2b
     echo

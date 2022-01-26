@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 start=$(date +%s.%N)
 
-stage=0
+stage=5
 LOG_LOCATION=`pwd`/logs
 
 if [ ! -d "$LOG_LOCATION" ]; then
@@ -111,14 +111,14 @@ fi
 end4=$(date +%s.%N)    
 
 
-# if [ $stage -le 17 ]; then
-#     echo "===== BEGIN : DNN training ====="
-#     echo
-#       local/chain/run_tdnn_copy.sh
+if [ $stage -le 5 ]; then
+    echo "===== BEGIN : DNN training ====="
+    echo
+      local/chain/tdnn_f.sh
 
-#     echo
-#     echo "===== END: DNN training ====="
-# fi
+    echo
+    echo "===== END: DNN training ====="
+fi
 
 end=$(date +%s.%N)  
 

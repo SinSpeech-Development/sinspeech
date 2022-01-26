@@ -70,5 +70,3 @@ runtime=$(python -c "print(${end} - ${start})")
 echo "Runtime was $runtime"
 
 exit 0
-
-exit 0

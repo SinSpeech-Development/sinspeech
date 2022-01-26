@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+start=$(date +%s.%N)
+
+
 stage=0
 LOG_LOCATION=`pwd`/logs
 
@@ -60,5 +63,12 @@ if [ $stage -le 1 ]; then
     echo "===== END: Valid Set MFCC feature extraction ====="
 
 fi
+
+end=$(date +%s.%N)    
+runtime=$(python -c "print(${end} - ${start})")
+
+echo "Runtime was $runtime"
+
+exit 0
 
 exit 0

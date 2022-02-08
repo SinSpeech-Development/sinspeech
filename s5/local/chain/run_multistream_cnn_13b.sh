@@ -128,10 +128,7 @@ if [ $stage -le 14 ]; then
   tdnnf-layer name=tdnnf17a $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=6
   tdnnf-layer name=tdnnf18a $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=6
   tdnnf-layer name=tdnnf19a $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=6
-  tdnnf-layer name=tdnnf20a $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=6
-  tdnnf-layer name=tdnnf21a $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=6
-  tdnnf-layer name=tdnnf22a $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=6
-  tdnnf-layer name=tdnnf23a $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=6
+
   
   relu-batchnorm-dropout-layer name=tdnn6b $affine_opts input=cnn5 dim=512
   tdnnf-layer name=tdnnf7b $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=9
@@ -147,10 +144,7 @@ if [ $stage -le 14 ]; then
   tdnnf-layer name=tdnnf17b $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=9
   tdnnf-layer name=tdnnf18b $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=9
   tdnnf-layer name=tdnnf19b $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=9
-  tdnnf-layer name=tdnnf20b $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=9
-  tdnnf-layer name=tdnnf21b $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=9
-  tdnnf-layer name=tdnnf22b $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=9
-  tdnnf-layer name=tdnnf23b $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=9
+
 
   relu-batchnorm-dropout-layer name=tdnn6c $affine_opts input=cnn5 dim=512
   tdnnf-layer name=tdnnf7c $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=12
@@ -166,10 +160,7 @@ if [ $stage -le 14 ]; then
   tdnnf-layer name=tdnnf17c $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=12
   tdnnf-layer name=tdnnf18c $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=12
   tdnnf-layer name=tdnnf19c $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=12
-  tdnnf-layer name=tdnnf20c $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=12
-  tdnnf-layer name=tdnnf21c $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=12
-  tdnnf-layer name=tdnnf22c $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=12
-  tdnnf-layer name=tdnnf23c $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=12
+  
   
   relu-batchnorm-dropout-layer name=tdnn17 $affine_opts input=Append(tdnnf23a,tdnnf23b,tdnnf23c) dim=768
   linear-component name=prefinal-l dim=256 $linear_opts
@@ -200,9 +191,9 @@ if [ $stage -le 15 ]; then
     --egs.chunk-width $frames_per_eg \
     --trainer.dropout-schedule $dropout_schedule \
     --trainer.add-option="--optimization.memory-compression-level=2" \
-    --trainer.num-chunk-per-minibatch 16 \
+    --trainer.num-chunk-per-minibatch 256 \
     --trainer.frames-per-iter 2500000 \
-    --trainer.num-epochs 1 \
+    --trainer.num-epochs 6 \
     --trainer.optimization.num-jobs-initial 1 \
     --trainer.optimization.num-jobs-final 1 \
     --trainer.optimization.initial-effective-lrate 0.00015 \
@@ -232,7 +223,7 @@ if [ $stage -le 17 ]; then
   echo "decoding started"
   frames_per_chunk=$(echo $frames_per_eg | cut -d, -f1)
   rm $dir/.error 2>/dev/null || true
-  for data in test; do
+  for data in test valid; do
       (
     steps/nnet3/decode.sh \
           --acwt 1.0 --post-decode-acwt 10.0 \

@@ -119,7 +119,7 @@ end5=$(date +%s.%N)
 if [ $stage -le 6 ]; then
     echo "===== BEGIN : run_multistream_1a.sh ====="
     echo
-      local/chain/tdnn_f.sh
+      local/chain/run_multistream_1a.sh
 
     echo
     echo "===== END: run_multistream_1a.sh ====="

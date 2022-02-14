@@ -17,6 +17,8 @@ nj=$(nproc)
 . ./path.sh
 . utils/parse_options.sh
 
+dim=512
+
 set -euo pipefail
 
 if [ $stage -le 0 ]; then
@@ -117,13 +119,122 @@ end5=$(date +%s.%N)
 
 
 if [ $stage -le 6 ]; then
-    echo "===== BEGIN : run_multistream_1a.sh ====="
+    echo "===== BEGIN : run_tdnnf_13a.sh ====="
     echo
-      local/chain/run_multistream_1a.sh
+      local/run_tdnnf_13a.sh
 
     echo
-    echo "===== END: run_multistream_1a.sh ====="
+    echo "===== END: run_tdnnf_13a.sh ====="
 fi
+
+
+if [ $stage -le 7 ]; then
+    echo "===== BEGIN : run_tdnnf_13b.sh ====="
+    echo
+      local/run_tdnnf_13b.sh
+
+    echo
+    echo "===== END: run_tdnnf_13b.sh ====="
+fi
+
+if [ $stage -le 8 ]; then
+    echo "===== BEGIN : run_tdnnf_17a.sh ====="
+    echo
+      local/run_tdnnf_17a.sh
+
+    echo
+    echo "===== END: run_tdnnf_17a.sh ====="
+fi
+
+if [ $stage -le 9 ]; then
+    echo "===== BEGIN : run_tdnnf_17b.sh ====="
+    echo
+      local/run_tdnnf_17b.sh
+
+    echo
+    echo "===== END: run_tdnnf_17b ====="
+fi
+
+if [ $dim -eq 512 ]; then
+
+    if [ $stage -le 10 ]; then
+        echo "===== BEGIN : run_multistream_cnn_13a.sh ====="
+        echo
+        local/run_multistream_cnn_13a.sh
+
+        echo
+        echo "===== END: run_multistream_cnn_13a.sh ====="
+    fi
+
+    if [ $stage -le 11 ]; then
+        echo "===== BEGIN : run_multistream_cnn_13b.sh ====="
+        echo
+        local/run_multistream_cnn_13b.sh
+
+        echo
+        echo "===== END: run_multistream_cnn_13b.sh ====="
+    fi
+
+    if [ $stage -le 12 ]; then
+        echo "===== BEGIN : run_multistream_cnn_17a.sh ====="
+        echo
+        local/run_multistream_cnn_17a.sh
+
+        echo
+        echo "===== END: run_multistream_cnn_17a.sh ====="
+    fi
+
+    if [ $stage -le 6 ]; then
+        echo "===== BEGIN : run_multistream_cnn_17b.sh ====="
+        echo
+        local/run_multistream_cnn_17b.sh
+
+        echo
+        echo "===== END: run_multistream_cnn_17b.sh ====="
+    fi
+
+fi
+
+if [ $dim -eq 256 ]; then
+
+    if [ $stage -le 10 ]; then
+        echo "===== BEGIN : run_multistream_cnn_13c.sh ====="
+        echo
+        local/run_multistream_cnn_13c.sh
+
+        echo
+        echo "===== END: run_multistream_cnn_13c.sh ====="
+    fi
+
+    if [ $stage -le 11 ]; then
+        echo "===== BEGIN : run_multistream_cnn_13d.sh ====="
+        echo
+        local/run_multistream_cnn_13d.sh
+
+        echo
+        echo "===== END: run_multistream_cnn_13d.sh ====="
+    fi
+
+    if [ $stage -le 12 ]; then
+        echo "===== BEGIN : run_multistream_cnn_17c.sh ====="
+        echo
+        local/run_multistream_cnn_17c.sh
+
+        echo
+        echo "===== END: run_multistream_cnn_17c.sh ====="
+    fi
+
+    if [ $stage -le 6 ]; then
+        echo "===== BEGIN : run_multistream_cnn_17d.sh ====="
+        echo
+        local/run_multistream_cnn_17d.sh
+
+        echo
+        echo "===== END: run_multistream_cnn_17d.sh ====="
+    fi
+
+fi
+
 
 end=$(date +%s.%N)  
 

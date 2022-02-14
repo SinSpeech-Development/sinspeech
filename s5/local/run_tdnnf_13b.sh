@@ -17,7 +17,7 @@ nnet3_affix=
 
 # The rest are config specific to this script. Most of the parameters
 # are just hardcoded at this level, in the commands below.
-affix=1a
+affix=13b
 tree_affix=
 train_stage=-10
 get_egs_stage=-10
@@ -97,23 +97,23 @@ num_targets=$(tree-info $tree_dir/tree |grep num-pdfs|awk '{print $2}')
   # the use of short notation for the descriptor
   fixed-affine-layer name=lda input=Append(-1,0,1,ReplaceIndex(ivector, t, 0)) affine-transform-file=$dir/configs/lda.mat
   # the first splicing is moved before the lda layer, so no splicing here
-  relu-batchnorm-dropout-layer name=tdnn1 $tdnn_opts dim=256
-  tdnnf-layer name=tdnnf2 $tdnnf_opts dim=256 bottleneck-dim=80 time-stride=1
-  tdnnf-layer name=tdnnf3 $tdnnf_opts dim=256 bottleneck-dim=80 time-stride=1
-  tdnnf-layer name=tdnnf4 $tdnnf_opts dim=256 bottleneck-dim=80 time-stride=1
-  tdnnf-layer name=tdnnf5 $tdnnf_opts dim=256 bottleneck-dim=80 time-stride=0
-  tdnnf-layer name=tdnnf6 $tdnnf_opts dim=256 bottleneck-dim=80 time-stride=3
-  tdnnf-layer name=tdnnf7 $tdnnf_opts dim=256 bottleneck-dim=80 time-stride=3
-  tdnnf-layer name=tdnnf8 $tdnnf_opts dim=256 bottleneck-dim=80 time-stride=3
-  tdnnf-layer name=tdnnf9 $tdnnf_opts dim=256 bottleneck-dim=80 time-stride=3
-  tdnnf-layer name=tdnnf10 $tdnnf_opts dim=256 bottleneck-dim=80 time-stride=3
-  tdnnf-layer name=tdnnf11 $tdnnf_opts dim=256 bottleneck-dim=80 time-stride=3
-  tdnnf-layer name=tdnnf12 $tdnnf_opts dim=256 bottleneck-dim=80 time-stride=3
-  tdnnf-layer name=tdnnf13 $tdnnf_opts dim=256 bottleneck-dim=80 time-stride=3
+  relu-batchnorm-dropout-layer name=tdnn1 $tdnn_opts dim=512
+  tdnnf-layer name=tdnnf2 $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=1
+  tdnnf-layer name=tdnnf3 $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=1
+  tdnnf-layer name=tdnnf4 $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=1
+  tdnnf-layer name=tdnnf5 $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=0
+  tdnnf-layer name=tdnnf6 $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=3
+  tdnnf-layer name=tdnnf7 $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=3
+  tdnnf-layer name=tdnnf8 $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=3
+  tdnnf-layer name=tdnnf9 $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=3
+  tdnnf-layer name=tdnnf10 $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=3
+  tdnnf-layer name=tdnnf11 $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=3
+  tdnnf-layer name=tdnnf12 $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=3
+  tdnnf-layer name=tdnnf13 $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=3
   linear-component name=prefinal-l dim=192 $linear_opts
-  prefinal-layer name=prefinal-chain input=prefinal-l $prefinal_opts big-dim=256 small-dim=192
+  prefinal-layer name=prefinal-chain input=prefinal-l $prefinal_opts big-dim=512 small-dim=192
   output-layer name=output include-log-softmax=false dim=$num_targets $output_opts
-  prefinal-layer name=prefinal-xent input=prefinal-l $prefinal_opts big-dim=256 small-dim=192
+  prefinal-layer name=prefinal-xent input=prefinal-l $prefinal_opts big-dim=512 small-dim=192
   output-layer name=output-xent dim=$num_targets learning-rate-factor=$learning_rate_factor $output_opts
 EOF
   steps/nnet3/xconfig_to_configs.py --xconfig-file $dir/configs/network.xconfig --config-dir $dir/configs/

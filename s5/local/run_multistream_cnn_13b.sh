@@ -17,7 +17,7 @@ nnet3_affix=
 
 # The rest are config specific to this script. Most of the parameters
 # are just hardcoded at this level, in the commands below.
-affix=1a
+affix=13b
 tree_affix=
 train_stage=-10
 get_egs_stage=-10
@@ -162,7 +162,7 @@ if [ $stage -le 14 ]; then
   tdnnf-layer name=tdnnf19c $tdnnf_opts dim=512 bottleneck-dim=80 time-stride=12
   
   
-  relu-batchnorm-dropout-layer name=tdnn17 $affine_opts input=Append(tdnnf23a,tdnnf23b,tdnnf23c) dim=768
+  relu-batchnorm-dropout-layer name=tdnn13 $affine_opts input=Append(tdnnf19a,tdnnf19b,tdnnf19c) dim=768
   linear-component name=prefinal-l dim=256 $linear_opts
   
   prefinal-layer name=prefinal-chain input=prefinal-l $prefinal_opts big-dim=1536 small-dim=256

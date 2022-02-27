@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 start=$(date +%s.%N)
 
-stage=5
+stage=14
 LOG_LOCATION=`pwd`/logs
 
 if [ ! -d "$LOG_LOCATION" ]; then
@@ -17,7 +17,7 @@ nj=$(nproc)
 . ./path.sh
 . utils/parse_options.sh
 
-dim=512
+dim=0
 
 set -euo pipefail
 
@@ -184,7 +184,7 @@ if [ $dim -eq 512 ]; then
         echo "===== END: run_multistream_cnn_17a.sh ====="
     fi
 
-    if [ $stage -le 6 ]; then
+    if [ $stage -le 13 ]; then
         echo "===== BEGIN : run_multistream_cnn_17b.sh ====="
         echo
         local/run_multistream_cnn_17b.sh
@@ -224,7 +224,7 @@ if [ $dim -eq 256 ]; then
         echo "===== END: run_multistream_cnn_17c.sh ====="
     fi
 
-    if [ $stage -le 6 ]; then
+    if [ $stage -le 13 ]; then
         echo "===== BEGIN : run_multistream_cnn_17d.sh ====="
         echo
         local/run_multistream_cnn_17d.sh
@@ -235,6 +235,14 @@ if [ $dim -eq 256 ]; then
 
 fi
 
+if [ $stage -le 14 ]; then
+        echo "===== BEGIN : run_multistream_cnn_17d.sh ====="
+        echo
+        local/run_multistream_cnn_17d.sh
+
+        echo
+        echo "===== END: run_multistream_cnn_17d.sh ====="
+    fi
 
 end=$(date +%s.%N)  
 

@@ -236,12 +236,12 @@ if [ $dim -eq 256 ]; then
 fi
 
 if [ $stage -le 14 ]; then
-        echo "===== BEGIN : run_multistream_cnn_17d.sh ====="
+        echo "===== BEGIN :run_tdnn_lstm.sh ====="
         echo
-        local/run_multistream_cnn_17d.sh
+        local/run_tdnn_lstm.sh
 
         echo
-        echo "===== END: run_multistream_cnn_17d.sh ====="
+        echo "===== END: run_tdnn_lstm.sh ====="
     fi
 
 end=$(date +%s.%N)  
